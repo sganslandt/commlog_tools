@@ -7,16 +7,19 @@ import LogParser._
 
 class LogParser(views: Seq[Presentation]) {
 
-  def digest(source: Source) {
-    for (line <- source.getLines())
-      handle(line)
+  def digest(sources: Seq[Source]) {
+    for (source <- sources)
+      for (line <- source.getLines())
+        handle(line)
 
     views.foreach(p => p.eof())
   }
 
   private def handle(logLine: String) {
     parse(logLine) match {
-      case Some(parsed) => views.foreach(v => { v.handle(parsed) })
+      case Some(parsed) => views.foreach(v => {
+        v.handle(parsed)
+      })
       case None => println("Failed to parse line: " + logLine)
     }
   }

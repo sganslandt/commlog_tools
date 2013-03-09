@@ -13,3 +13,7 @@ mainClass in assembly := Some("nu.ganslandt.commlog.tools.Main")
 libraryDependencies += "org.scalatest" % "scalatest_2.10" % "1.9.1" % "test"
 
 libraryDependencies += "com.github.nscala-time" %% "nscala-time" % "0.2.0"
+
+libraryDependencies += "com.github.scopt" %% "scopt" % "2.1.0"
+
+resolvers += "sonatype-public" at "https://oss.sonatype.org/content/groups/public"
