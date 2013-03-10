@@ -18,7 +18,7 @@ object Main {
         case Some(file) => List(Source.fromFile(file))
         case None => List(Source.fromInputStream(System.in))
       }
-      var views: List[Presentation] = List(new SummaryPresentation)
+      var views: List[Presentation] = List(new SummaryPresentation, new PerQueryDetailsPresentation)
       if (config.verbose) views = new EachRequestPresentation :: views
 
       val digester = new LogParser(views)

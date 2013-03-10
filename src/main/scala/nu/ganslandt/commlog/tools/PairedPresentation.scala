@@ -1,6 +1,6 @@
 package nu.ganslandt.commlog.tools
 
-abstract class PairedPresentation extends Presentation {
+trait PairedPresentation extends Presentation {
 
   var outstandingRequests: Map[String, Request] = Map()
 

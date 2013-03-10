@@ -55,20 +55,10 @@ class SummaryPresentation extends PairedPresentation {
     val _95perc = responseTimes.sortBy(d => d.millis).apply(responseTimes.size * 95 / 100).millis
     val median = responseTimes.sortBy(d => d.millis).apply(responseTimes.size / 2).millis
 
-    println("Execution Time")
-    println(f"${"total"}%10s ${"min"}%10s ${"max"}%10s ${"avg"}%10s ${"95%"}%10s ${"median"}%10s")
-    println(f"${fmt(total)}%10s ${fmt(min)}%10s ${fmt(max)}%10s ${fmt(avg)}%10s ${fmt(_95perc)}%10s ${fmt(median)}%10s")
+    println("Response times")
+    println(f"${"calls"}%10s ${"total"}%10s ${"min"}%8s ${"max"}%8s ${"avg"}%8s ${"95%"}%8s ${"median"}%8s")
+    println(f"${responseTimes.size}%10d ${fmt(total)}%10s ${fmt(min)}%8s ${fmt(max)}%8s ${fmt(avg)}%8s ${fmt(_95perc)}%8s ${fmt(median)}%8s")
     println()
-  }
-
-  private def fmt(millis: Long): String = {
-    val seconds: Int = 1000
-    val minutes: Int = 60 * 1000
-
-    if (millis < 2 * seconds) millis + "ms"
-    else if (millis < 2 * minutes) (millis / seconds) + "s"
-    else if (millis < 60 * minutes) DateTimeFormat.forPattern("mm'm'ss's'").print(new DateTime(millis))
-    else DateTimeFormat.forPattern("h'h'm'm's's'").print(new DateTime(millis))
   }
 
 }
