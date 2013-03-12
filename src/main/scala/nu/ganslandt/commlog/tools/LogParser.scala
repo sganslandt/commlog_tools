@@ -29,19 +29,26 @@ class LogParser(views: Seq[Presentation]) {
 object LogParser {
 
   def parse(logLine: String): Option[LogLine] = {
-    lineP1 findFirstIn logLine match {
-      case Some(lineP1(year, month, day, hour, minute, s, ms, logLineType, id, requestType, payload)) => {
-        val timestamp = new DateTime(year.toInt, month.toInt, day.toInt, hour.toInt, minute.toInt, s.toInt, ms.toInt)
-        logLineType match {
-          case "Request" => Some(new Request(id, requestType, timestamp, payload))
-          case "Response" => Some(new Response(id, timestamp, payload))
-          case "Error" => Some(new Error(id, timestamp, payload))
-        }
-      }
-      case None => None
+    val year = logLine.substring(0, 4)
+    val month = logLine.substring(5, 7)
+    val day = logLine.substring(8, 10)
+    val hour = logLine.substring(11, 13)
+    val minute = logLine.substring(14, 16)
+    val s = logLine.substring(17, 19)
+    val ms = logLine.substring(20, logLine.indexOf(' ', 20))
+    val rest = logLine.substring(logLine.indexOf(" ", 20) + 1)
+    val logLineType = rest.substring(7, rest.indexOf(':'))
+    val id = rest.substring(rest.indexOf('[') + 1, rest.indexOf(']'))
+    val requestType = rest.substring(rest.indexOf(']') + 1, rest.indexOf('('))
+    val payload = rest.substring(rest.indexOf('(') + 1, rest.indexOf(')'))
+
+    val timestamp = new DateTime(year.toInt, month.toInt, day.toInt, hour.toInt, minute.toInt, s.toInt, ms.toInt)
+    logLineType match {
+      case "Request" => Some(new Request(id, requestType, timestamp, payload))
+      case "Response" => Some(new Response(id, timestamp, payload))
+      case "Error" => Some(new Error(id, timestamp, payload))
+      case _ => println(s"Wrong loglineType [${logLineType}]"); None
     }
   }
-
-  private val lineP1 = """(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2}),(\d{1,3}) .* (\w+): \[(.*)\] (.*)\((.*)\)""".r
 
 }
